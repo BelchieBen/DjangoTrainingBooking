@@ -16,6 +16,9 @@ def home(request):
     attendents = attendees.objects.all()
     courses = Course.objects.all()
     context = {'attendees' : attendents, 'course': courses}
+    search_input = request.GET.get('search-area') or ''
+    if search_input:
+        context['course'] = context['course'].filter(courseName__icontains=search_input)
     return render(request, 'booking/home.html', context)
 
 class courses(DetailView):
@@ -47,5 +50,5 @@ class book(View):
 class addCourse(CreateView):
     model = Course
     template_name = 'booking/addCourse.html'
-    form_class = addCourseForm()
+    form_class = addCourseForm
     success_url = reverse_lazy('home')

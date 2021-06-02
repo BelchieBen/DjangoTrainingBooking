@@ -1,9 +1,33 @@
 {% extends "booking/base.html" %}
+{% load crispy_forms_tags %}
 {% block title %} Add Course {% endblock title %}
 {% block content %}
+<div class="mx-auto" style="width: 700px;">
+<br>
 <h1>Add a new course</h1>
 <form method="POST">
     {% csrf_token %}
-    {{form}}
+    {{form|crispy}}
+    <br>
+    <button class="btn btn-success" type="submit">Add Course</button>
 </form>
+</div>
+
+<!--JQuery functions to add a date time picker-->
+<script>
+    $(function () {
+      $("#id_start_date").datetimepicker({
+        format: 'd/m/Y H:i',
+      });
+    });
+  </script>
+
+<script>
+    $(function () {
+      $("#id_end_date").datetimepicker({
+        format: 'd/m/Y H:i',
+      });
+    });
+  </script>
+
 {% endblock content %}

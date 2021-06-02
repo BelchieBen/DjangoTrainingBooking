@@ -3,23 +3,62 @@
 {% block content %}
 
 {% if request.user.is_staff %}
-<div class="container px-4">
+
+<!--<div class="container px-4">
+  <br>
     <h1>Current Courses</h1>
     {% for c in course %}
-    <div class="row gx-5">
       <div class="col">
-       <div class="p-3 border bg-light"><a href="{% url 'course' c.id %}">{{c}}</a></div>
+       <div class="p-3 border bg-light">
+         <a href="{% url 'course' c.id %}">
+           {{c.courseName}} is being delivered by {{c.host}} on {{c.start_date}}
+         </a>
+        </div>
       </div>
+      <br>
     {% endfor %}
-    </div>
+    <br>
     <h1>Recent Bookings</h1>
     {% for a in attendees %}
-    <div class="row gx-5">
       <div class="col">
-       <div class="p-3 border bg-light">{{a}}</div>
+       <div class="p-3 border bg-light">
+         {{a}}
+       </div>
       </div>
+      <br>
       {% endfor %}
     </div>
+  </div>-->
+  <br>
+  <div class="container px-4">
+  <h1>Upcoming Courses</h1>
+    <div class="row">
+      {% for c in course %}
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+        <div class="card rounded-0 p-0 shadow-sm">
+          <canvas id="test"></canvas>
+          <div class="card-body text-center">
+            <h4><a href="{% url 'book' c.id %}" style="text-decoration: none;">{{c.courseName}}</a></h4>
+            <p><b>Delivered by: </b>{{c.host}}</p>
+            <p><b>On </b>{{c.start_date}}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+  
+  <h1>Recent Bookings</h1>
+      {% for a in attendees %}
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+        <div class="card rounded-0 p-0 shadow-sm">
+          <canvas id="test"></canvas>
+          <div class="card-body text-center">
+            <h4>{{a.user}}</h4>
+            <p><b>Booked onto: {{a.course}} </b></p>
+            <p><b>On </b></p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
   </div>
 {% else %}
 <h1>Sorry you are not staff</h1>

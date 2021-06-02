@@ -2,13 +2,15 @@
 {% block title %} Book Training {% endblock title %}
 {% block content %}
 
+<br>
 <div class="container px-4">
-    <h1>Current Courses</h1>
     {% for c in course %}
+    <h1>{{c.courseName}}</h1>
     <div class="row gx-5">
       <div class="col">
        <div class="p-3 border bg-light">
            <b>Course: </b><p>{{c.courseName}}</p>
+           <b>Description</b><p>{{c.courseDesc}}</p>
            <b>Trainer: </b><p>{{c.host}}</p>
            <b>Start Date: </b><p>{{c.start_date}}</p>
            <b>End Date: </b><p>{{c.end_date}}</p>
