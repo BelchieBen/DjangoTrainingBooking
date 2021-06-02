@@ -1,0 +1,9 @@
+{% extends "booking/base.html" %}
+{% block title %} Add Course {% endblock title %}
+{% block content %}
+<h1>Add a new course</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{form}}
+</form>
+{% endblock content %}

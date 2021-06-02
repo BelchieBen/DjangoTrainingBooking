@@ -10,6 +10,7 @@ class Course(models.Model):
         ('EXT', 'EXTERNAL'),
     )
     courseName = models.CharField(max_length=200)
+    courseDesc = models.CharField(max_length=500)
     host = models.CharField(max_length=3, choices=staff)
     min_participants = models.IntegerField()
     max_participants = models.IntegerField()

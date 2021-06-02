@@ -1,5 +1,5 @@
 {% extends "booking/base.html" %}
-{% block title %} Home {% endblock title %}
+{% block title %} Book Training {% endblock title %}
 {% block content %}
 
 <div class="container px-4">
@@ -12,7 +12,11 @@
            <b>Trainer: </b><p>{{c.host}}</p>
            <b>Start Date: </b><p>{{c.start_date}}</p>
            <b>End Date: </b><p>{{c.end_date}}</p>
-           <a href="{% url 'book' c.id %}">See More</a>
+           <form method="POST">
+               {% csrf_token %}
+            <button class="btn btn-success" type="submit">Book a place</button>
+           </form>
+           
         </div>
       </div>
     {% endfor %}
