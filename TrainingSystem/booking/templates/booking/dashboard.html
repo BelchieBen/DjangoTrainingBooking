@@ -1,0 +1,30 @@
+{% extends "booking/base.html" %}
+{% block title %} Dashboard {% endblock title %}
+{% block content %}
+
+{% if request.user.is_staff %}
+<div class="container px-4">
+    <h1>Current Courses</h1>
+    {% for c in course %}
+    <div class="row gx-5">
+      <div class="col">
+       <div class="p-3 border bg-light"><a href="{% url 'course' c.id %}">{{c}}</a></div>
+      </div>
+    {% endfor %}
+    </div>
+    <h1>Recent Bookings</h1>
+    {% for a in attendees %}
+    <div class="row gx-5">
+      <div class="col">
+       <div class="p-3 border bg-light">{{a}}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+{% else %}
+<h1>Sorry you are not staff</h1>
+{% endif %}
+
+{% endblock content %}
+
+

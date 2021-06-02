@@ -1,0 +1,21 @@
+{% extends "booking/base.html" %}
+{% block title %} Courses {% endblock title %}
+{% block content %}
+
+<!--Using database data in the {brackets} -->
+
+<div class="container px-4">
+    <h1>{{course.courseName}}</h1><!--Displaying course name, first I reference the object course and then display an attribute which is .courseName -->
+    <h2>Delivered by: {{course.host}}</h2><!--Displaying the course host -->
+    <div class="row gx-5">
+      <div class="col">
+        <div class="p-3 border bg-light"><b>attendees:</b></div>
+        {% for a in attendees %}<!--Using a for loop to display single objects not a queryset -->
+       <div class="p-3 border bg-light">{{a.user}}</div><!--Listing all particients -->
+       {% endfor %}
+      </div>
+    </div>
+</div>
+{% endblock content %}
+
+
