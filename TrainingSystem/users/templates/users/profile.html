@@ -1,0 +1,27 @@
+{% extends "booking/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<div class="content-section border container px-4 mt-5">
+	  <div class="media mt-3">
+	    <img class="rounded-circle account-img" style="height: 125px; width: 125px; margin-right: 20px; margin-bottom: 16px; display: inline-block" src="{{user.profile.image.url}}">
+	    <div class="media-body">
+	      <h2 class="account-heading">{{user.username}}</h2>
+	      <p class="text-secondary">{{user.email}}</p>
+	    </div>
+	  </div>
+	  <form method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<fieldset class="form-group">
+				<legend class="border-bottom mb-4">Profile Info</legend>
+				{{Uform|crispy}}	
+				{{Pform|crispy}}	
+
+			</fieldset>
+			<br>
+			<div class="form-group">
+				<button class="btn btn-success" type="submit">Update Profile</button>	
+			</div>	
+			
+		</form>
+	</div>
+{% endblock content %}

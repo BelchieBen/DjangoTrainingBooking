@@ -1,0 +1,16 @@
+{% extends "booking/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} Add Course {% endblock title %}
+{% block content %}
+<div class="mx-auto" style="width: 700px;">
+<br>
+<h1>Add a new program</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{form|crispy}}
+    <br>
+    <button class="btn btn-success" type="submit">Add Program</button>
+</form>
+</div>
+
+{% endblock content %}

@@ -1,3 +1,4 @@
+{% load static %}
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -16,6 +17,12 @@
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
 
+   <!--Chart jS-->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.2/chart.min.js"></script>
+  
+   <link type="text/css" href="{% static 'booking/main.css' %}">
+   <script src="{% static 'booking/charts.js' %}"></script>
+  
 </head>
 
 <body>
@@ -36,6 +43,22 @@
               </li>
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'addCourse' %}">Add Courses</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'addProgram' %}">Add Programs</a>
+              </li>
+              {% endif %}
+              {% if request.user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'profile' %}">Profile</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'logout' %}">Logout</a>
+              </li>
+              
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'login' %}">Login</a>
               </li>
               {% endif %}
             </ul>

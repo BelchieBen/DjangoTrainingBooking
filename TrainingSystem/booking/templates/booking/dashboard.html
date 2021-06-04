@@ -1,68 +1,116 @@
 {% extends "booking/base.html" %}
+{% load my_filters %}
 {% block title %} Dashboard {% endblock title %}
 {% block content %}
 
 {% if request.user.is_staff %}
-
-<!--<div class="container px-4">
-  <br>
-    <h1>Current Courses</h1>
-    {% for c in course %}
-      <div class="col">
-       <div class="p-3 border bg-light">
-         <a href="{% url 'course' c.id %}">
-           {{c.courseName}} is being delivered by {{c.host}} on {{c.start_date}}
-         </a>
-        </div>
-      </div>
-      <br>
-    {% endfor %}
-    <br>
-    <h1>Recent Bookings</h1>
-    {% for a in attendees %}
-      <div class="col">
-       <div class="p-3 border bg-light">
-         {{a}}
-       </div>
-      </div>
-      <br>
-      {% endfor %}
-    </div>
-  </div>-->
   <br>
   <div class="container px-4">
+    <h1>Welcome to your dashboard {{request.user }}</h1>
+    <br>
+    <div class="row">
+
+      <!--PROGRAMS CARD-->
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">  
+            <h2>Active Programs</h2>
+            {% for p in programs %}         
+                <div class="card rounded-0 p-0 shadow-sm mb-4" >
+                  <div class="card-body text-center">
+                    <h4><a href="#" style="text-decoration: none;">{{p.name}}</a></h4>
+                  </div>
+                  <div class="card-body text-center">
+                    <p><b>Total Annual Bookings: </b>{{total.booking}}</p>
+                    <p><b>Total Annual Courses: </b>{{total.booking}}</p>
+                  </div>           
+                </div>       
+            {% endfor %}
+      </div>
+      <!--END PROGRAMS CARD-->
+
+      <!--CHART CARD-->
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" >
+        <h2>Chart</h2>
+        <div class="card rounded-0 p-0 shadow-sm" > 
+          <div class="card-body text-center">
+            <canvas id="myChart"></canvas>
+            <!--<script>AnnaulBookings()</script>-->
+            <br>
+           <a class="btn btn-success" href="#">Expand</a>
+           <a class="btn btn-primary" href="#">See more</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--END CHART CARD-->
+
   <h1>Upcoming Courses</h1>
     <div class="row">
       {% for c in course %}
       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
         <div class="card rounded-0 p-0 shadow-sm">
-          <canvas id="test"></canvas>
+          <div style="max-height: 200px; max-width: 400px; overflow: hidden;">
+          <img style="height: auto; width: 400px; margin-right: 20px; margin-bottom: 16px; display: inline-block;" src="{{c.image.url}}">
+          </div>
           <div class="card-body text-center">
-            <h4><a href="{% url 'book' c.id %}" style="text-decoration: none;">{{c.courseName}}</a></h4>
+            <h4><a href="{% url 'viewCourse' c.id %}" style="text-decoration: none;">{{c.courseName}}</a></h4>
             <p><b>Delivered by: </b>{{c.host}}</p>
             <p><b>On </b>{{c.start_date}}</p>
+            <p><b>To </b>{{c.end_date}}</p>
+           <p> <b>Number of Bookings: </b>{{ c.attendees_set.count }}</p>
           </div>
         </div>
       </div>
+      {% endfor %} 
+    </div>
+
+    <!--
+    <h1>Recent Bookings</h1>
+    <div class="row">
+        {% for a in attendees %}
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <div class="card rounded-0 p-0 shadow-sm mb-4">
+            <div style="max-height: 200px; max-width: 400px; overflow: hidden;">
+            </div>
+            <div class="card-body text-center">
+              <h4>{{a.user}}</h4>
+              <p><b>Booked onto: </b> {{a.course.courseName}}</p>
+              <p><b>Delivered on </b>{{a.course.start_date}}</p>
+            </div>
+          </div>
+        </div>
       {% endfor %}
+    </div>-->
   
-  <h1>Recent Bookings</h1>
-      {% for a in attendees %}
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-        <div class="card rounded-0 p-0 shadow-sm">
-          <canvas id="test"></canvas>
-          <div class="card-body text-center">
-            <h4>{{a.user}}</h4>
-            <p><b>Booked onto: {{a.course}} </b></p>
-            <p><b>On </b></p>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-  </div>
+      
 {% else %}
 <h1>Sorry you are not staff</h1>
 {% endif %}
+
+<script>
+   var ctx = document.getElementById('myChart').getContext('2d');
+        var chartOptions = {
+            //I need to add options here
+        }
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'bar',
+
+            // The data for our dataset
+            data: {
+                labels: {{labels|safe}},
+                datasets: [{
+                    label: 'Bookings per program',
+                    backgroundColor: 'rgb(44,167,178,0.6)', //The last number on the colour list is the opasity so 0.6 is 60% opasity
+                    hoverBackgroundColor: 'rgb(214, 54, 75,0.6)',
+                    borderColor: 'rgb(44,167,178)',
+                    data: {{valueList|safe}}
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+</script>
 
 {% endblock content %}
 
