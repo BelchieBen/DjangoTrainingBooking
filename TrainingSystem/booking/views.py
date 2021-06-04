@@ -24,6 +24,10 @@ def dashboard(request):
         labels.append(str(key))
 
     context = {'attendees' : attendents, 'course': courses, 'programs': programs, 'attendants':emptDict, 'valueList':valueList, 'labels':labels}
+    c = Course.objects.get(id=1)
+    att = c.attendents_set.all()
+    print(att)
+    context = {'attendees' : attendents, 'course': courses}
     return render(request, 'booking/dashboard.html', context)
 
 def home(request):

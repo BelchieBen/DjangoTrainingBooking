@@ -76,6 +76,17 @@
               <p><b>Booked onto: </b> {{a.course.courseName}}</p>
               <p><b>Delivered on </b>{{a.course.start_date}}</p>
             </div>
+      {% endfor %}
+  
+  <h1>Recent Bookings</h1>
+      {% for a in attendees %}
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+        <div class="card rounded-0 p-0 shadow-sm">
+          <canvas id="test"></canvas>
+          <div class="card-body text-center">
+            <h4>{{a.user}}</h4>
+            <p><b>Booked onto: </b> {{a.course.courseName}}</p>
+            <p><b>On: </b>{{a.course.start_date}}</p>
           </div>
         </div>
       {% endfor %}
