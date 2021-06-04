@@ -4,6 +4,7 @@ from django.db.models.deletion import CASCADE
 
 class availablePrograms(models.Model):
     name = models.CharField(max_length=200)
+    isActive = models.BooleanField(blank=True)
 
 
 class Course(models.Model):
@@ -21,6 +22,7 @@ class Course(models.Model):
     max_participants = models.IntegerField()
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
+    
 
     def __str__(self):
         return f'{self.courseName} is being delivered by {self.host} on {self.start_date}'
@@ -28,6 +30,5 @@ class Course(models.Model):
 class attendees(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-
     def __str__(self):
         return f'{self.user} has booked onto {self.course}'

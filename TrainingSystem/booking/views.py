@@ -9,6 +9,9 @@ from django.urls import reverse, reverse_lazy
 def dashboard(request):
     attendents = attendees.objects.all()
     courses = Course.objects.all()
+    c = Course.objects.get(id=1)
+    att = c.attendents_set.all()
+    print(att)
     context = {'attendees' : attendents, 'course': courses}
     return render(request, 'booking/dashboard.html', context)
 
