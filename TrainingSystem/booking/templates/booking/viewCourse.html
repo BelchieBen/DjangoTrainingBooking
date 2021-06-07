@@ -24,8 +24,11 @@
            <b>Attendees </b> 
            {% for a in c.attendees_set.all %} <!--Using reverse forign key lookup to get list of attendees for a course-->
            <ul>
-               <li>{{a.user}}</li>
+               <li>{{a.user}} <a href="{% url 'deleteBooking' a.id %}" class="btn btn-danger btn-sm">Delete</a></li>
            </ul>
+           {% endfor %}
+           {% for cc in course %}
+           <a href="{% url 'courseComplete' cc.id %}" class="btn btn-success">Mark as complete</a>
            {% endfor %}
         </div>
       </div>

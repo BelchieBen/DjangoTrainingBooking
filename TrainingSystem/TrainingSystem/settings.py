@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'storages',
     'rest_framework',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -136,6 +137,14 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = 'training-test-files'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'ilearntest112@gmail.com'
+#EMAIL_HOST_PASSWORD = os.environ.get('ILEARN_EMAIL_PASSWORD')
+EMAIL_HOST_PASSWORD = 'Testing321'
 
 
 AWS_S3_FILE_OVERWRITE = False

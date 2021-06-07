@@ -30,10 +30,14 @@ class Course(models.Model):
     end_date = models.DateTimeField()
     program = models.ForeignKey(Programs, on_delete=models.CASCADE, default=4)
     image=models.ImageField(default='course.jpg',upload_to='course_photos') #Setting the users profile pic
+    course_completed = models.BooleanField(blank=True)
     
 
     def __str__(self):
         return f'{self.courseName} is being delivered by {self.host} on {self.start_date}'
+
+    def get_approved_bookings(self):
+        return self.attendees_set.filter(approved=True)
 
 class attendees(models.Model):
     departments = [
@@ -55,13 +59,12 @@ class attendees(models.Model):
         ('6+M', '6+ Months'),
     ]
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user')
-    manager = models.ForeignKey(settings.AUTH_USER_MODEL, limit_choices_to={'is_staff':True}, on_delete=CASCADE, related_name='manager', blank=True)
+    manager = models.ForeignKey(settings.AUTH_USER_MODEL, limit_choices_to={'is_staff':True}, on_delete=models.CASCADE, related_name='AttendManager', blank=True)
     role = models.CharField(max_length=100)
     department = models.CharField(max_length=2, choices=departments)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     course_due = models.CharField(max_length=3, choices=courseNeededBy)
     your_development = models.CharField(max_length=3000)
-    manager_complete = models.CharField(max_length=1000, blank=True)
     approved = models.BooleanField(default=False, blank=True)
 
 

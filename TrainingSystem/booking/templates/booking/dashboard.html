@@ -19,8 +19,8 @@
                     <h4><a href="#" style="text-decoration: none;">{{p.name}}</a></h4>
                   </div>
                   <div class="card-body text-center">
-                    <p><b>Total Annual Bookings: </b>{{total.booking}}</p>
-                    <p><b>Total Annual Courses: </b>{{total.booking}}</p>
+                    <p><b>Total Annual Bookings: </b>{{p.course_set.courseName}}</p>
+                    <p><b>Total Annual Courses: </b>{{p.course_set.count}}</p>
                   </div>           
                 </div>       
             {% endfor %}
@@ -56,41 +56,18 @@
             <p><b>Delivered by: </b>{{c.host}}</p>
             <p><b>On </b>{{c.start_date}}</p>
             <p><b>To </b>{{c.end_date}}</p>
-           <p> <b>Number of Bookings: </b>{{ c.attendees_set.count }}</p>
+           <p> <b>Number of Bookings: </b>
+              {{ c.get_approved_bookings.count }}
+          </p>
           </div>
         </div>
       </div>
       {% endfor %} 
     </div>
 
-    <!--
-    <h1>Recent Bookings</h1>
-    <div class="row">
-        {% for a in attendees %}
-        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-          <div class="card rounded-0 p-0 shadow-sm mb-4">
-            <div style="max-height: 200px; max-width: 400px; overflow: hidden;">
-            </div>
-            <div class="card-body text-center">
-              <h4>{{a.user}}</h4>
-              <p><b>Booked onto: </b> {{a.course.courseName}}</p>
-              <p><b>Delivered on </b>{{a.course.start_date}}</p>
-            </div>
-      {% endfor %}
-  
-  <h1>Recent Bookings</h1>
-      {% for a in attendees %}
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-        <div class="card rounded-0 p-0 shadow-sm">
-          <canvas id="test"></canvas>
-          <div class="card-body text-center">
-            <h4>{{a.user}}</h4>
-            <p><b>Booked onto: </b> {{a.course.courseName}}</p>
-            <p><b>On: </b>{{a.course.start_date}}</p>
-          </div>
-        </div>
-      {% endfor %}
-    </div>-->
+    {% for a in attendees %}
+    <a href="{% url 'approve' a.id %}" style="text-decoration: none;">{{a.user}}</a>
+    {% endfor %}
   
       
 {% else %}

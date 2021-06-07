@@ -1,0 +1,23 @@
+{% extends "booking/base.html" %}
+{% block content %}
+
+<br>
+<br>
+<div class="content-section container px-4">
+
+<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 mx-auto">
+    <div class="card rounded-0 p-0 shadow-sm">
+      <div style="max-height: 200px; max-width: 400px; overflow: hidden;">
+      </div>
+      <div class="card-body text-center">
+        <a href="{% url 'dashboard' %}" style="text-decoration: none; color: black;"><i class="fas fa-arrow-circle-left" style="color: black;"></i> Dashboard</a>
+        <form method="POST">
+            {% csrf_token %}
+            <p>Are you sure you want to delete this task?</p>
+            <input class="btn btn-danger" type="submit" value="Delete">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

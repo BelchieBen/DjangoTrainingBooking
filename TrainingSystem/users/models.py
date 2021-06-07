@@ -6,6 +6,7 @@ from PIL import Image
 class Profile(models.Model): #Creating the profile model
 	user = models.OneToOneField(User, on_delete=models.CASCADE) #Setting the user models and also using the .CASCADE so when the user is deleted everything associated with them is deleted
 	image=models.ImageField(default='default.jpg',upload_to='profile_photos') #Setting the users profile pic
+	manager = models.ForeignKey(User, limit_choices_to={'is_staff':True}, on_delete=models.CASCADE, related_name='manager', null=True)
 
 	def __str__(self):
 		return f'{self.user.username} Profile'
