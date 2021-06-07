@@ -5,15 +5,12 @@ from django.db.models.deletion import CASCADE
 class Programs(models.Model):
     name = models.CharField(max_length=200)
     isActive = models.BooleanField(blank=True)
-<<<<<<< HEAD
 
     def __str__(self):
         if self.isActive == True:
             return f'{self.name} is active'
         else:
             return f'{self.name} is not active'
-=======
->>>>>>> 6cffaa94ad40bce84f543fb4372679cdbb351af7
 
 
 class Course(models.Model):
@@ -62,14 +59,11 @@ class attendees(models.Model):
     role = models.CharField(max_length=100)
     department = models.CharField(max_length=2, choices=departments)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-<<<<<<< HEAD
     course_due = models.CharField(max_length=3, choices=courseNeededBy)
     your_development = models.CharField(max_length=3000)
     manager_complete = models.CharField(max_length=1000, blank=True)
     approved = models.BooleanField(default=False, blank=True)
 
 
-=======
->>>>>>> 6cffaa94ad40bce84f543fb4372679cdbb351af7
     def __str__(self):
         return f'{self.user} has booked onto {self.course}'
