@@ -1,5 +1,5 @@
 from django.db import models
-from django.conf import settings
+from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
 
 class Programs(models.Model):
@@ -40,28 +40,14 @@ class Course(models.Model):
         return self.attendees_set.filter(approved=True)
 
 class attendees(models.Model):
-    departments = [
-        ('UI', 'UX & UI'),
-        ('IT', 'IT & Support'),
-        ('RI', 'Research & Innovation'),
-        ('MD', 'Mobile Development'),
-        ('WD', 'Web Development'),
-        ('CS', 'Cyber Security'),
-        ('HR', 'Human Resources'),
-        ('FN', 'Finance'),
-        ('SA', 'Sales'),
-        ('MA', 'Marketing'),
-    ]
     courseNeededBy = [
         ('W1M', 'Within 1 Month'),
         ('1-3', '1-3 Months'),
         ('3-6', '3-6 Months'),
         ('6+M', '6+ Months'),
     ]
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user')
-    manager = models.ForeignKey(settings.AUTH_USER_MODEL, limit_choices_to={'is_staff':True}, on_delete=models.CASCADE, related_name='AttendManager', blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
     role = models.CharField(max_length=100)
-    department = models.CharField(max_length=2, choices=departments)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     course_due = models.CharField(max_length=3, choices=courseNeededBy)
     your_development = models.CharField(max_length=3000)

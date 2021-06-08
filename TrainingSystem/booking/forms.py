@@ -30,7 +30,7 @@ class addprogramForm(forms.ModelForm):
 class bookCourse(forms.ModelForm):
     class Meta:
         model = attendees
-        fields = ['manager', 'role', 'department', 'course_due', 'your_development']
+        fields = [ 'role', 'course_due', 'your_development']
         labels = {
             'your_development':'How has this training been identified? How will you apply the learning in your role? How will you measure the success of this learning?',
             'role':'Your Job Title'

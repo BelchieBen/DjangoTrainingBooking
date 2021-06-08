@@ -12,5 +12,6 @@ urlpatterns = [
     path('approve/booking/<int:pk>/', approveBooking.as_view(), name='approve'),
     path('delete/booking/<int:pk>/', deleteBooking.as_view(), name='deleteBooking'),
     path('complete/course/<int:pk>/', completeCourse.as_view(), name='courseComplete'),
+    path('insights', views.insights, name='insights')
 
 ]

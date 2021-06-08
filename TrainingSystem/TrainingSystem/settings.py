@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'storages',
     'rest_framework',
     'django_extensions',
+    'workers',
 ]
 
 MIDDLEWARE = [

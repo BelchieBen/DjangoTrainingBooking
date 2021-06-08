@@ -4,6 +4,49 @@
 {% block content %}
 
 {% if request.user.is_staff %}
+
+<!--STYLES FOR POPUP-->
+
+<style>
+  /* The Modal (background) */
+  .modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+</style>
+
   <br>
   <div class="container px-4">
     <h1>Welcome to your dashboard {{request.user }}</h1>
@@ -35,17 +78,50 @@
             <canvas id="myChart"></canvas>
             <!--<script>AnnaulBookings()</script>-->
             <br>
-           <a class="btn btn-success" href="#">Expand</a>
-           <a class="btn btn-primary" href="#">See more</a>
+            <button id="myBtn" class="btn btn-success">Expand</button>
+            <div id="myModal" class="modal">
+              <!-- Popup content -->
+              <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Bookings Per Course</h2>
+                <canvas id="myChartBig"></canvas>
+              </div>
+            </div>
+           <a class="btn btn-primary" href="{% url 'insights' %}">See more</a>
           </div>
         </div>
       </div>
     </div>
     <!--END CHART CARD-->
 
-  <h1>Upcoming Courses</h1>
+  
+  <h2>Completed Courses</h2>
     <div class="row">
       {% for c in course %}
+      {% if c.course_completed %}
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+        <div class="card rounded-0 p-0 shadow-sm">
+          <div style="max-height: 200px; max-width: 400px; overflow: hidden;">
+          <img style="height: auto; width: 400px; margin-right: 20px; margin-bottom: 16px; display: inline-block;" src="{{c.image.url}}">
+          </div>
+          <div class="card-body text-center">
+            <h4><a href="{% url 'viewCourse' c.id %}" style="text-decoration: none;">{{c.courseName}}</a></h4>
+            <p><b>Delivered by: </b>{{c.host}}</p>
+            <p><b>On </b>{{c.start_date}}</p>
+            <p><b>To </b>{{c.end_date}}</p>
+            <p><b>Number of Bookings: </b>
+              {{ c.get_approved_bookings.count }}
+            </p>
+            <p><i class="fas fa-check-circle" style="color: green;"></i> Completed</p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+
+      <h2>Upcoming Courses</h2>
+      {% for c in course %}
+      {% if not c.course_completed %}
       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
         <div class="card rounded-0 p-0 shadow-sm">
           <div style="max-height: 200px; max-width: 400px; overflow: hidden;">
@@ -62,8 +138,49 @@
           </div>
         </div>
       </div>
+      {% endif %}
       {% endfor %} 
     </div>
+    
+    
+    <br>
+
+    <!--TABLE CARD-->
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-12" >
+      <h2>User Data</h2>
+      <div class="card rounded-0 p-0 shadow-sm" > 
+        <div class="card-body text-center">
+          <table id="userData" class="display table">
+            <thead class="thead-dark">
+              <tr>
+                <th class="th-sm">Employee Number</th>
+                <th class="th-sm">User</th>
+                <th class="th-sm">Email</th>
+                <th class="th-sm">Department</th>
+                <th class="th-sm">Manager</th>
+                <th class="th-sm">Total Completed Courses</th>
+                <th class="th-sm">Completed Courses</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for u in allData %}
+              <tr>
+                <td>{{u.EmployeeNumber}}</td>
+                <td>{{u.Name}}</td>
+                <td>{{u.Email}}</td>
+                <td>{{u.Department}}</td>
+                <td>{{u.Manager}}</td>
+                <td>{{u.TotalCoursesCompleted}}</td>
+                <td>{{u.CoursesCompleted}}</td> 
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--END TABLE CARD-->
 
     {% for a in attendees %}
     <a href="{% url 'approve' a.id %}" style="text-decoration: none;">{{a.user}}</a>
@@ -74,6 +191,13 @@
 <h1>Sorry you are not staff</h1>
 {% endif %}
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.0/b-1.5.2/b-colvis-1.5.2/b-flash-1.5.2/b-html5-1.5.2/b-print-1.5.2/cr-1.5.0/fh-3.1.4/r-2.2.2/datatables.min.css"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.0/b-1.5.2/b-colvis-1.5.2/b-flash-1.5.2/b-html5-1.5.2/b-print-1.5.2/cr-1.5.0/fh-3.1.4/r-2.2.2/datatables.min.js"></script>
+
+<!--Chart JS SMALL-->
 <script>
    var ctx = document.getElementById('myChart').getContext('2d');
         var chartOptions = {
@@ -100,6 +224,72 @@
         });
 </script>
 
+<!--Chart JS BIG-->
+<script>
+  var ctx = document.getElementById('myChartBig').getContext('2d');
+       var chartOptions = {
+           //I need to add options here
+       }
+       var chart = new Chart(ctx, {
+           // The type of chart we want to create
+           type: 'bar',
+
+           // The data for our dataset
+           data: {
+               labels: {{labels|safe}},
+               datasets: [{
+                   label: 'Bookings per program',
+                   backgroundColor: 'rgb(44,167,178,0.6)', //The last number on the colour list is the opasity so 0.6 is 60% opasity
+                   hoverBackgroundColor: 'rgb(214, 54, 75,0.6)',
+                   borderColor: 'rgb(44,167,178)',
+                   data: {{valueList|safe}}
+               }]
+           },
+
+           // Configuration options go here
+           options: {}
+       });
+</script>
+
+<script>
+  $(document).ready(function() {
+  $('#userData').DataTable( {
+    dom: 'Bfrtip',
+    buttons: [
+      'copy', 'csv', 'excel', 'pdf', 'print'
+    ],
+    } );
+  } );
+</script>
+
+<!--SCRIPT FOR POPUP-->
+<script>
+  // Get the modal
+  var modal = document.getElementById("myModal");
+
+  // Get the button that opens the modal
+  var btn = document.getElementById("myBtn");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks on the button, open the modal
+  btn.onclick = function() {
+  modal.style.display = "block";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+  modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+  if (event.target == modal) {
+      modal.style.display = "none";
+  }
+  }
+</script>
 {% endblock content %}
 
 

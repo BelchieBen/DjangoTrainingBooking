@@ -1,3 +1,4 @@
+from users.models import Profile
 from django import urls
 from django.db.models import manager
 from django.http.response import HttpResponse
@@ -10,11 +11,55 @@ from .forms import addCourseForm, addprogramForm, bookCourse
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.contrib.auth.models import User
+from django.conf import settings
+import pandas as pd
 
 def dashboard(request):
     attendents = attendees.objects.all()
     courses = Course.objects.all()
     programs = Programs.objects.all()
+    userData = User.objects.all()
+    UserDetails ={}
+
+    for u in userData:
+        testlist = []
+        userID = u.id
+        testlist.append(userID)
+        UserDetails[userID] = userID
+
+        userName = u.username
+        testlist.append(userName)
+        UserDetails[userID] = testlist
+
+        userEmail = u.email
+        testlist.append(userEmail)
+        UserDetails[userID]= testlist
+
+        userDepartment = u.profile.department
+        testlist.append(userDepartment)
+        UserDetails[userID] = testlist
+
+        userManager = u.profile.manager
+        testlist.append(userManager)
+        UserDetails[userID] = testlist
+
+        totalCompleteCourse = u.user.filter(course__course_completed=True).count()
+        testlist.append(totalCompleteCourse)
+        UserDetails[userID] = testlist
+
+        completedCourses = u.user.filter(approved=True).filter(course__course_completed=True).values_list('course__courseName', flat=True)
+        completedList = list(completedCourses)
+        testlist.append(completedList)
+        UserDetails[userID] = testlist
+    
+    df = pd.DataFrame.from_dict(UserDetails, orient='index', columns=['EmployeeNumber','Name', 'Email','Department','Manager','TotalCoursesCompleted', 'CoursesCompleted'])
+    allData=[]
+    for i in range(df.shape[0]):
+        temp = df.iloc[i]
+        allData.append(dict(temp))
+    
+
     emptDict = {}
     for event in courses:
         attendies =  event.attendees_set.filter(approved=True).count()
@@ -26,7 +71,7 @@ def dashboard(request):
         valueList.append(value)
         labels.append(str(key))
 
-    context = {'attendees' : attendents, 'course': courses, 'programs': programs, 'attendants':emptDict, 'valueList':valueList, 'labels':labels}
+    context = {'attendees' : attendents, 'course': courses, 'programs': programs, 'attendants':emptDict, 'valueList':valueList, 'labels':labels, 'userData':userData, 'allData':allData}
     return render(request, 'booking/dashboard.html', context)
 
 def home(request):
@@ -70,9 +115,7 @@ class book(View):
         else:
             attendants = attendees.objects.create(
                 user = self.request.user,
-                manager = data['manager'],
                 role = data['role'],
-                department = data['department'],
                 course = course_inst,
                 course_due = data['course_due'],
                 your_development = data['your_development'],
@@ -113,9 +156,15 @@ class approveBooking(View):
     def get(self, request, *args, **kwargs):
         attend_id = self.kwargs.get('pk', None)
         booking_inst = attendees.objects.get(id = attend_id)
+        context = {'bookingInst':booking_inst}
+        return render(request,'booking/approveRequest.html', context)
+    
+    def post(self, request, *args, **kwargs):
+        attend_id = self.kwargs.get('pk', None)
+        booking_inst = attendees.objects.get(id = attend_id)
         booking_inst.approved=True
         booking_inst.save()
-        return HttpResponse('Success')
+        return redirect('dashboard')
 
 class deleteBooking(DeleteView):
     model = attendees
@@ -130,4 +179,7 @@ class completeCourse(View):
         course_inst.course_completed=True
         course_inst.save()
         return render(request, 'booking/complete.html')
+
+def insights(request):
+    return render(request, 'booking/insights.html')
 

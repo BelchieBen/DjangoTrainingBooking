@@ -22,4 +22,4 @@ class UserUpdateForm(forms.ModelForm): #The method to update user profile
 class ProfileUpdateForm(forms.ModelForm):
 	class Meta:
 		model = Profile
-		fields = ['image', 'manager']#Updating the users Profile Image
+		fields = ['image', 'manager', 'department']#Updating the users Profile Image
