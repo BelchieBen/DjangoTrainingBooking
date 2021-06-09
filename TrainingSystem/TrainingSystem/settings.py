@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'storages',
     'rest_framework',
     'django_extensions',
-    'workers',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -87,6 +87,10 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+CRONJOBS = [
+    ('*/1 * * * *', 'booking.cron.remind_participants')
+]
 
 
 # Password validation
