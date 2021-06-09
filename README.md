@@ -22,3 +22,9 @@ This section is for the other apprentices, if you are curious about how this wor
 - Contains all the models, functions, templates regarding the user booking process (viewing available courses and booking onto those courses)
 
 I have tried to keep the codebase as simple and maintainable as possible so after learning the basics of Django it should be easy to follow but if you don’t understand a certain function or how something works, ask me I’m happy to explain the code.
+
+Finally if you want to have a go with the website yourself then you can by doing the following:
+1. Clone this repository into a folder on your PC
+2. Launch a virtual enviorement and cd into the TrainingSystem directory
+3. Run the command `pip install -r requirements.txt` to install all the dependancys 
+4. Finally run the command `django r` to run the development server
