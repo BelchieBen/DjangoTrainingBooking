@@ -28,7 +28,11 @@
            </ul>
            {% endfor %}
            {% for cc in course %}
+           {% if c.course_completed %}
+           <a class="btn btn-secondary" disabled>This course is complete</a>
+           {% else %}
            <a href="{% url 'courseComplete' cc.id %}" class="btn btn-success">Mark as complete</a>
+           {% endif %}
            {% endfor %}
         </div>
       </div>
