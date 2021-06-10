@@ -4,12 +4,14 @@
 
 <div class="container px-4">
     <br>
-    <h1>Current Courses</h1>
+    <!--SECTION FOR COMPANY WIDE COURSES-->
+    <h1>Current Company Wide Courses</h1>
     <br>
-    {% for c in course %}
+    {% for c in GLO_courses %}
       <div class="col">
        <div class="p-3 border bg-light">
            <b>Course: </b><p>{{c.courseName}}</p>
+           <b>Available to:</b><p>{{c.division}}</p>
            <b>Trainer: </b><p>{{c.host}}</p>
            <b>Start Date: </b><p>{{c.start_date}}</p>
            <b>End Date: </b><p>{{c.end_date}}</p>
@@ -18,6 +20,87 @@
       </div>
       <br>
     {% endfor %}
+    <!--END SECTION FOR COMPANY WIDE COURSES-->
+
+    <!--SECTION FOR TECHNOLOGY COURSES-->
+    {% if request.user.profile.division == "TEC" %}
+    <h1>Current Technology Courses</h1>
+    <br>
+    {% for c in TEC_courses %}
+      <div class="col">
+       <div class="p-3 border bg-light">
+           <b>Course: </b><p>{{c.courseName}}</p>
+           <b>Available to:</b><p>{{c.division}}</p>
+           <b>Trainer: </b><p>{{c.host}}</p>
+           <b>Start Date: </b><p>{{c.start_date}}</p>
+           <b>End Date: </b><p>{{c.end_date}}</p>
+           <a href="{% url 'book' c.id %}">See More</a>
+        </div>
+      </div>
+      <br>
+    {% endfor %}
+    {% endif %}
+    <!--END SECTION FOR TECHNOLOGY COURSES-->
+
+    <!--SECTION FOR OPERATIONS COURSES-->
+    {% if request.user.profile.division == "OPE" %}
+    <h1>Current Operations Courses</h1>
+    <br>
+    {% for c in OPE_courses %}
+      <div class="col">
+       <div class="p-3 border bg-light">
+           <b>Course: </b><p>{{c.courseName}}</p>
+           <b>Available to:</b><p>{{c.division}}</p>
+           <b>Trainer: </b><p>{{c.host}}</p>
+           <b>Start Date: </b><p>{{c.start_date}}</p>
+           <b>End Date: </b><p>{{c.end_date}}</p>
+           <a href="{% url 'book' c.id %}">See More</a>
+        </div>
+      </div>
+      <br>
+    {% endfor %}
+    {% endif %}
+    <!--END SECTION FOR OPERATIONS COURSES-->
+
+    <!--SECTION FOR FINANCE COURSES-->
+    {% if request.user.profile.division == "FIN" %}
+    <h1>Current Finance Courses</h1>
+    <br>
+    {% for c in FIN_courses %}
+      <div class="col">
+       <div class="p-3 border bg-light">
+           <b>Course: </b><p>{{c.courseName}}</p>
+           <b>Available to:</b><p>{{c.division}}</p>
+           <b>Trainer: </b><p>{{c.host}}</p>
+           <b>Start Date: </b><p>{{c.start_date}}</p>
+           <b>End Date: </b><p>{{c.end_date}}</p>
+           <a href="{% url 'book' c.id %}">See More</a>
+        </div>
+      </div>
+      <br>
+    {% endfor %}
+    {% endif %}
+    <!--END SECTION FOR FINANCE COURSES-->
+
+    <!--SECTION FOR MARKETING COURSES-->
+    {% if request.user.profile.division == "MAR" %}
+    <h1>Current Finance Courses</h1>
+    <br>
+    {% for c in MART_courses %}
+      <div class="col">
+       <div class="p-3 border bg-light">
+           <b>Course: </b><p>{{c.courseName}}</p>
+           <b>Available to:</b><p>{{c.division}}</p>
+           <b>Trainer: </b><p>{{c.host}}</p>
+           <b>Start Date: </b><p>{{c.start_date}}</p>
+           <b>End Date: </b><p>{{c.end_date}}</p>
+           <a href="{% url 'book' c.id %}">See More</a>
+        </div>
+      </div>
+      <br>
+    {% endfor %}
+    {% endif %}
+    <!--END SECTION FOR MARKETING COURSES-->
     
   </div>
 

@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import courses, book, addCourse, addProgram, viewCourse, approveBooking, deleteBooking, completeCourse
+from .views import courses, book, addCourse, addProgram, viewCourse, approveBooking, deleteBooking, completeCourse, rejectBooking
 urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('', views.home, name='home'),
@@ -12,6 +12,8 @@ urlpatterns = [
     path('approve/booking/<int:pk>/', approveBooking.as_view(), name='approve'),
     path('delete/booking/<int:pk>/', deleteBooking.as_view(), name='deleteBooking'),
     path('complete/course/<int:pk>/', completeCourse.as_view(), name='courseComplete'),
-    path('insights', views.insights, name='insights')
+    path('insights', views.insights, name='insights'),
+    path('reject/booking/<int:pk>/', rejectBooking.as_view(), name='rejectBooking'),
+    
 
 ]

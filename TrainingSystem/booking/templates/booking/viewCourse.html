@@ -21,11 +21,22 @@
            <b>Trainer: </b><p>{{c.host}}</p>
            <b>Start Date: </b><p>{{c.start_date}}</p>
            <b>End Date: </b><p>{{c.end_date}}</p>
-           <b>Attendees </b> 
+           <b>Approved Attendees: </b> 
            {% for a in c.attendees_set.all %} <!--Using reverse forign key lookup to get list of attendees for a course-->
+           {% if a.status == "APR" %}
            <ul>
                <li>{{a.user}} <a href="{% url 'deleteBooking' a.id %}" class="btn btn-danger btn-sm">Delete</a></li>
            </ul>
+           {% endif %}
+           {% endfor %}
+           <hr>
+           <b>Pending Attendees: </b> 
+           {% for a in c.attendees_set.all %} <!--Using reverse forign key lookup to get list of attendees for a course-->
+           {% if a.status == "PEN" %}
+           <ul>
+               <li>{{a.user}}</li>
+           </ul>
+           {% endif %}
            {% endfor %}
            {% for cc in course %}
            {% if c.course_completed %}

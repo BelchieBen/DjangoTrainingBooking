@@ -10,18 +10,12 @@
       <div style="max-height: 200px; max-width: 400px; overflow: hidden;">
       </div>
       <div class="card-body text-center">
-          <h4>Please respond to this training request</h4>
+          <h4>Are you sure you want to reject {{bookingInst.user}}'s request?</h4>
           <hr>
-          <p><b>Employee: </b>{{bookingInst.user}}</p>
-          <p><b>Course: </b>{{bookingInst.course.courseName}}</p>
-          <p><b>Delivered by: </b>{{bookingInst.course.host}}</p>
-          <p><b>On </b>{{bookingInst.course.start_date}}</p>
-          <p><b>To </b>{{bookingInst.course.end_date}}</p>
           <form method="POST">
               {% csrf_token %}
-              <button class="btn btn-success">Approve</button>
+              <button type="submit" class="btn btn-danger">Yes I am sure</button>
           </form>
-          <a href="{% url 'rejectBooking' bookingInst.id %}" class="btn btn-danger">Reject</a>
       </div>
     </div>
   </div>

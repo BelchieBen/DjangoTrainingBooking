@@ -50,7 +50,7 @@ def dashboard(request):
         testlist.append(totalCompleteCourse)
         UserDetails[userID] = testlist
 
-        completedCourses = u.user.filter(approved=True).filter(course__course_completed=True).values_list('course__courseName', flat=True) #Same as above query but this time i use .values_list to only get the values of the queryset which in this case is the courseName
+        completedCourses = u.user.filter(status='APR').filter(course__course_completed=True).values_list('course__courseName', flat=True) #Same as above query but this time i use .values_list to only get the values of the queryset which in this case is the courseName
         completedList = list(completedCourses)#Turning the queryset into a list
         testlist.append(completedList)
         UserDetails[userID] = testlist
@@ -64,7 +64,7 @@ def dashboard(request):
     #Needed to get data for chart on Dashboard
     emptDict = {} #New dict to hold approved bookings
     for event in courses: #Looping through the courses object
-        attendies =  event.attendees_set.filter(approved=True).count() #Getting attendees through reverse lookup on forign key which is attendees_set.filter() and then counting the values
+        attendies =  event.attendees_set.filter(status='APR').count() #Getting attendees through reverse lookup on forign key which is attendees_set.filter() and then counting the values
         emptDict[event.courseName] = attendies
 
     #Lists for the chart
@@ -80,7 +80,12 @@ def dashboard(request):
 def home(request):
     attendents = attendees.objects.all()
     courses = Course.objects.all()
-    context = {'attendees' : attendents, 'course': courses}
+    TEC_courses = Course.objects.filter(division_access="TEC")
+    OPE_courses = Course.objects.filter(division_access="OPE")
+    FIN_courses = Course.objects.filter(division_access="FIN")
+    MAR_courses = Course.objects.filter(division_access="MAR")
+    GLO_courses = Course.objects.filter(division_access="GLO")
+    context = {'attendees' : attendents, 'course': courses, 'TEC_courses':TEC_courses, 'OPE_courses':OPE_courses, 'FIN_courses':FIN_courses, 'MAR_courses':MAR_courses, 'GLO_courses':GLO_courses}
     search_input = request.GET.get('search-area') or '' #Getting the value of the searchbar from HTML template
     if search_input: #If there is a value in there
         context['course'] = context['course'].filter(courseName__icontains=search_input) #Creating a queryset which filters the course object so if it contains the value in search bar it will appear, that is icontains
@@ -165,7 +170,7 @@ class approveBooking(View):
     def post(self, request, *args, **kwargs):
         attend_id = self.kwargs.get('pk', None)
         booking_inst = attendees.objects.get(id = attend_id)
-        booking_inst.approved=True
+        booking_inst.status='APR'
         booking_inst.save()
         return redirect('dashboard')
 
@@ -185,4 +190,18 @@ class completeCourse(View):
 
 def insights(request):
     return render(request, 'booking/insights.html')
+
+class rejectBooking(View):
+    def get(self, request, *args, **kwargs):
+        attend_id = self.kwargs.get('pk', None)
+        booking_inst = attendees.objects.get(id = attend_id)
+        context = {'bookingInst':booking_inst}
+        return render(request,'booking/rejectBooking.html', context)
+    
+    def post(self, request, *args, **kwargs):
+        attend_id = self.kwargs.get('pk', None)
+        booking_inst = attendees.objects.get(id = attend_id)
+        booking_inst.status='REJ'
+        booking_inst.save()
+        return redirect('dashboard')
 
