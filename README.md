@@ -1,12 +1,6 @@
 # DjangoTrainingBooking
 ## Welcome  
-This project is the start of the internal training system that will be used by L&D to help Ideagen employees’ book onto training courses. So far, the backend design is complete, and the web app preforms all the basic functionality outlined in the project scope to an extent. Some logistic issues like email replies are not working as the website needs to be on the public domain and during development it’s on a local domain, there are a few other features that need to be added, these are:
-- Automatic email reminders to the course host & participants 
-- Exclusively allow employees in a certain department to access certain courses
-- Change the approved field in the attendees model to have states (Pending, Approved, Rejected) rather than the current True or False  
-
-**When will this be done?**
-I hope to add these features before the next rotation  
+This project is the start of the internal training system that will be used by L&D to help Ideagen employees’ book onto training courses. So far, the backend design is complete, and the web app preforms all the basic functionality outlined in the project scope to an extent. Some logistic issues like email replies are not working as the website needs to be on the public domain and during development it’s on a local domain.
 
 ## Documentation
 The design that is used in this project is documented on confluence and this can be found [here](https://ideagen.atlassian.net/wiki/spaces/~475003006/pages/38275022851/Training+System+Backend). As for the code, all the main files have comments to indicate what everything is doing.
