@@ -22,6 +22,16 @@ def dashboard(request):
     programs = Programs.objects.all()
     userData = User.objects.all()
 
+    #Counting the number of bookings there are per program
+    attDict = {}
+    for p in programs:
+        p_count = p.course_set.all()
+        for ll in p_count:
+            ll_count = ll.attendees_set.filter(status='APR')
+            counting = ll_count.count()
+            attDict[p.name] = counting
+    print(attDict)
+
     #Need all this for the user data table
     UserDetails ={} #Setting a dict to create a DataFrame from 
     for u in userData: #Looping through the user object
@@ -38,7 +48,7 @@ def dashboard(request):
         testlist.append(userEmail)
         UserDetails[userID]= testlist
 
-        userDepartment = u.profile.department
+        userDepartment = u.profile.get_department_display
         testlist.append(userDepartment)
         UserDetails[userID] = testlist
 
@@ -46,7 +56,7 @@ def dashboard(request):
         testlist.append(userManager)
         UserDetails[userID] = testlist
 
-        totalCompleteCourse = u.user.filter(course__course_completed=True).count() #Creating a query on the user object to count the number of courses completed, this is a 1 to many relationship through forign key so to access those atributes in a queryset use x__y
+        totalCompleteCourse = u.user.filter(status='APR').filter(course__course_completed=True).count() #Creating a query on the user object to count the number of courses completed, this is a 1 to many relationship through forign key so to access those atributes in a queryset use x__y
         testlist.append(totalCompleteCourse)
         UserDetails[userID] = testlist
 
@@ -67,10 +77,11 @@ def dashboard(request):
         attendies =  event.attendees_set.filter(status='APR').count() #Getting attendees through reverse lookup on forign key which is attendees_set.filter() and then counting the values
         emptDict[event.courseName] = attendies
 
+    #print(emptDict)
     #Lists for the chart
     valueList = []
     labels = []
-    for key,value in emptDict.items():#Getting the keys and values seperate from the dict
+    for key,value in attDict.items():#Getting the keys and values seperate from the dict
         valueList.append(value)
         labels.append(str(key))
 
@@ -189,7 +200,56 @@ class completeCourse(View):
         return render(request, 'booking/complete.html')
 
 def insights(request):
-    return render(request, 'booking/insights.html')
+    courses = Course.objects.all()
+    programs = Programs.objects.all()
+    profile = Profile.objects.all()
+    user = User.objects.all()
+
+    #Needed to get data for chart about bookings per program
+    emptDict = {} #New dict to hold approved bookings
+    for event in courses: #Looping through the courses object
+        attendies =  event.attendees_set.filter(status='APR').count() #Getting attendees through reverse lookup on forign key which is attendees_set.filter() and then counting the values
+        emptDict[event.courseName] = attendies
+
+    #Lists for the chart
+    valueList = []
+    labels = []
+    for key,value in emptDict.items():#Getting the keys and values seperate from the dict
+        valueList.append(value)
+        labels.append(str(key))
+
+    #Getting data for Pie chart
+    divisionDictv2 = {}
+    for program in programs:
+        division = program.course_set.all().values_list('division_access', flat=True).count()
+        ssssssss = program.course_set.all().values_list('division_access',flat=True)
+        divisionDictv2[ssssssss] = division
+
+    #Lists for the chart
+    DivisionData = []
+    DivisionLabels = []
+    for key,value in divisionDictv2.items():#Getting the keys and values seperate from the dict
+        DivisionData.append(value)
+        DivisionLabels.append(str(key))
+    
+    #Getting data for bar chart divisions & bookings chart
+    divisionBooking = {}
+    for p in courses:
+        divisionBook = p.attendees_set.all().count()
+        print(p.division_access, divisionBook)
+        key = p.get_division_access_display
+        #divisionDictv2[key] = divisionBook
+    #print(divisionBooking)
+
+    # #Lists for the chart
+    # DivisionData = []
+    # DivisionLabels = []
+    # for key,value in divisionDictv2.items():#Getting the keys and values seperate from the dict
+    #     DivisionData.append(value)
+    #     DivisionLabels.append(str(key))
+
+    context = {'valueList':valueList, 'labels':labels, 'DivisionLabels':DivisionLabels, 'DivisionData':DivisionData}
+    return render(request, 'booking/insights.html', context)
 
 class rejectBooking(View):
     def get(self, request, *args, **kwargs):

@@ -31,6 +31,8 @@ class Profile(models.Model): #Creating the profile model
     
     def __str__(self):
         return f'{self.user.username} Profile'
+    
+    
 	
 	# def get_user_completed_courses(self):
 	# 	return self.user.objects.filter(attendees.approved == True)

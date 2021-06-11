@@ -8,6 +8,7 @@
     <h1>Current Company Wide Courses</h1>
     <br>
     {% for c in GLO_courses %}
+    {% if not c.course_completed %}
       <div class="col">
        <div class="p-3 border bg-light">
            <b>Course: </b><p>{{c.courseName}}</p>
@@ -19,6 +20,7 @@
         </div>
       </div>
       <br>
+      {% endif %}
     {% endfor %}
     <!--END SECTION FOR COMPANY WIDE COURSES-->
 
@@ -27,6 +29,7 @@
     <h1>Current Technology Courses</h1>
     <br>
     {% for c in TEC_courses %}
+    {% if not c.course_completed %}
       <div class="col">
        <div class="p-3 border bg-light">
            <b>Course: </b><p>{{c.courseName}}</p>
@@ -38,6 +41,7 @@
         </div>
       </div>
       <br>
+      {% endif %}
     {% endfor %}
     {% endif %}
     <!--END SECTION FOR TECHNOLOGY COURSES-->
@@ -47,6 +51,7 @@
     <h1>Current Operations Courses</h1>
     <br>
     {% for c in OPE_courses %}
+    {% if not c.course_completed %}
       <div class="col">
        <div class="p-3 border bg-light">
            <b>Course: </b><p>{{c.courseName}}</p>
@@ -58,6 +63,7 @@
         </div>
       </div>
       <br>
+      {% endif %}
     {% endfor %}
     {% endif %}
     <!--END SECTION FOR OPERATIONS COURSES-->
@@ -67,6 +73,7 @@
     <h1>Current Finance Courses</h1>
     <br>
     {% for c in FIN_courses %}
+    {% if not c.course_completed %}
       <div class="col">
        <div class="p-3 border bg-light">
            <b>Course: </b><p>{{c.courseName}}</p>
@@ -78,15 +85,17 @@
         </div>
       </div>
       <br>
+    {% endif %}
     {% endfor %}
     {% endif %}
     <!--END SECTION FOR FINANCE COURSES-->
 
     <!--SECTION FOR MARKETING COURSES-->
     {% if request.user.profile.division == "MAR" %}
-    <h1>Current Finance Courses</h1>
+    <h1>Current Marketing Courses</h1>
     <br>
-    {% for c in MART_courses %}
+    {% for c in MAR_courses %}
+    {% if not c.course_completed %}
       <div class="col">
        <div class="p-3 border bg-light">
            <b>Course: </b><p>{{c.courseName}}</p>
@@ -98,6 +107,7 @@
         </div>
       </div>
       <br>
+      {% endif %}
     {% endfor %}
     {% endif %}
     <!--END SECTION FOR MARKETING COURSES-->
